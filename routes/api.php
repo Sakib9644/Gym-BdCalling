@@ -20,8 +20,8 @@ Route::middleware(['auth:api'])->group(function () {
         Route::put('admin/trainers/{trainer}', [TrainerController::class, 'update']);
         Route::delete('admin/trainers/{trainer}', [TrainerController::class, 'destroy']);
 
-        Route::get('admin/classes', [ClassScheduleController::class, 'index']);
-        Route::post('admin/classes', [ClassScheduleController::class, 'store']);
+        Route::get('admin/classes/get', [ClassScheduleController::class, 'index']);
+        Route::post('admin/classes/store', [ClassScheduleController::class, 'store']);
         Route::get('admin/classes/{class}', [ClassScheduleController::class, 'show']);
         Route::put('admin/classes/{class}', [ClassScheduleController::class, 'update']);
         Route::delete('admin/classes/{class}', [ClassScheduleController::class, 'destroy']);
