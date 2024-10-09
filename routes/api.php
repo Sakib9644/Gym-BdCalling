@@ -13,6 +13,7 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:api'])->group(function () {
     Route::middleware(['role:admin'])->group(function () {
+
         Route::get('admin/trainers', [TrainerController::class, 'index']);
         Route::post('admin/trainers', [TrainerController::class, 'store']);
         Route::get('admin/trainers/{trainer}', [TrainerController::class, 'show']);
