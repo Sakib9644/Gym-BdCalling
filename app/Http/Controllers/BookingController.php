@@ -80,12 +80,10 @@ class BookingController extends Controller
     {
         $booking = Booking::findOrFail($id);
 
-        // Ensure the booking belongs to the authenticated trainee
         if ($booking->trainee_id !== auth()->user()->id) {
             return response()->json(['error' => 'Unauthorized action.'], 403);
         }
 
-        // Increase class capacity
         $classSchedule = $booking->classSchedule; // Assuming there's a relation defined
         $classSchedule->increment('capacity');
 
