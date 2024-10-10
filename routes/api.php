@@ -34,7 +34,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::middleware(['role:trainee'])->group(function () {
         Route::get('trainee/profile', [TraineeController::class, 'profile']);
         Route::post('trainee/profile/update', [TraineeController::class, 'updateProfile']);
-        Route::post('trainee/bookings/store', [BookingController::class, 'store']);
+        Route::post('trainee/bookings-store', [BookingController::class, 'store']);
         Route::get('trainee/bookings', [BookingController::class, 'index']);
         Route::delete('trainee/bookings/delete', [BookingController::class, 'destroy']);
     });
