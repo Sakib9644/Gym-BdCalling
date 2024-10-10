@@ -10,4 +10,9 @@ class ClassSchedule extends Model
     use HasFactory;
     protected $guarded = [] ;
 
+    public function trainer()
+{
+    return $this->belongsTo(User::class, 'trainer_id');
+}
+
 }

@@ -13,19 +13,19 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'manage trainers']);
-        Permission::create(['name' => 'schedule classes']);
-        Permission::create(['name' => 'view schedules']);
-        Permission::create(['name' => 'manage profile']);
-        Permission::create(['name' => 'book classes']);
+        Permission::firstOrCreate(['name' => 'manage trainers', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'schedule classes', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'view schedules', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'manage profile', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'book classes', 'guard_name' => 'api']);
 
-        $adminRole = Role::create(['name' => 'admin']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
         $adminRole->givePermissionTo(['manage trainers', 'schedule classes']);
 
-        $trainerRole = Role::create(['name' => 'trainer']);
+        $trainerRole = Role::firstOrCreate(['name' => 'trainer', 'guard_name' => 'api']);
         $trainerRole->givePermissionTo('view schedules');
 
-        $traineeRole = Role::create(['name' => 'trainee']);
+        $traineeRole = Role::firstOrCreate(['name' => 'trainee', 'guard_name' => 'api']);
         $traineeRole->givePermissionTo(['manage profile', 'book classes']);
     }
 }

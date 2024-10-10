@@ -28,13 +28,16 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
     Route::middleware(['role:trainer'])->group(function () {
-        Route::get('trainer/classes', [TrainerController::class, 'index']);
+        Route::get('trainer/classes', [ClassScheduleController::class, 'index']);
     });
 
     Route::middleware(['role:trainee'])->group(function () {
         Route::get('trainee/profile', [TraineeController::class, 'profile']);
-        Route::post('trainee/bookings', [BookingController::class, 'store']);
+        Route::post('trainee/profile/update', [TraineeController::class, 'updateProfile']);
+        Route::post('trainee/bookings/store', [BookingController::class, 'store']);
         Route::get('trainee/bookings', [BookingController::class, 'index']);
-        Route::delete('trainee/bookings/{booking}', [BookingController::class, 'destroy']);
+        Route::delete('trainee/bookings/delete', [BookingController::class, 'destroy']);
+        Route::get('/trainee/classes', [BookingController::class, 'availableClasses']); // New route for available classes
+
     });
 });

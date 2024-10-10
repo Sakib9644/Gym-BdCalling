@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Validator;
+
 
 class TrainerController extends Controller
 {
@@ -21,7 +23,7 @@ class TrainerController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
-        $user->role = 'trainer'; 
+        $user->role = 'trainer';
         $user->save();
 
         $user->assignRole('trainer');
@@ -29,7 +31,7 @@ class TrainerController extends Controller
         $trainer = new Trainer();
         $trainer->user_id = $user->id;
         $trainer->expertise = $request->expertise;
-        $trainer->availability = json_encode($request->availability); 
+        $trainer->availability = json_encode($request->availability);
         $trainer->save();
 
         return response()->json($trainer, 201);

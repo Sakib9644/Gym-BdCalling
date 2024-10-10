@@ -4,97 +4,94 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClassSchedule;
+use App\Models\Trainer;
+use Carbon\Carbon;
+use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator as FacadesValidator;
 
 class ClassScheduleController extends Controller
 {
+
     public function index()
     {
-        $classes = ClassSchedule::with('trainer')->get();
-        return response()->json($classes);
-    }
+        $classes = ClassSchedule::where('trainer_id', auth()->user()->id)
+            ->with('trainer:id,name')
+            ->get();
 
-  public function store(Request $request)
-{
-    // Validate the incoming request data
-    $request->validate([
-        'trainer_id' => 'required|exists:trainers,id', 
-        'class_time' => 'required|date_format:H:i:s', // Expect only time
-        'capacity' => 'required|integer|min:1', 
-    ]);
+        $classw = [];
 
-    // Get the current date to combine with the class_time
-    $currentDate = \Carbon\Carbon::now()->format('Y-m-d');
-    // Combine current date with class time to create a full datetime
-    $combinedClassTime = $currentDate . ' ' . $request->class_time;
+        foreach ($classes as $class) {
+            $startTime = \Carbon\Carbon::parse($class->class_time);
+            $endTime = $startTime->copy()->addHours(2);
 
-    // Check how many classes the trainer has for the current day
-    $classCount = ClassSchedule::where('trainer_id', $request->trainer_id)
-        ->whereDate('class_time', $currentDate)
-        ->count();
+            $formattedClass = [
+                'class_time' => $startTime->format('Y-m-d H:i:s') . ' to ' . $endTime->format('H:i:s'),
+                'trainer_name' => $class->trainer->name,
+                'class_name' => $class->class_name,
+                'capacity' => $class->capacity
+            ];
 
-    // Check if the trainer has a class scheduled at the requested time
-    $existingClass = ClassSchedule::where('trainer_id', $request->trainer_id)
-        ->where('class_time', $combinedClassTime)
-        ->first();
-
-    // If the count exceeds 5, return an error response
-    if ($classCount >= 5) {
-        return response()->json(['message' => 'Trainer can only have a maximum of 5 classes per day.'], 400);
-    }
-
-    // If the trainer already has a class at the specified time, return an error response
-    if ($existingClass) {
-        return response()->json(['message' => 'Trainer already has a class scheduled at this time.'], 400);
-    }
-
-    // Check if the trainer is available at the requested time
-    $availability = \App\Models\Trainer::find($request->trainer_id)->availability;
-
-    // Decode the availability JSON if it's stored as a JSON string
-    $availability = json_decode($availability, true);
-
-    // Get the current day of the week
-    $dayOfWeek = \Carbon\Carbon::now()->format('l'); // e.g., "Monday"
-
-    // Check if the trainer is available today
-    if (isset($availability[$dayOfWeek])) {
-        // Get the available time range
-        $timeRange = explode('-', $availability[$dayOfWeek]);
-        $startTime = \Carbon\Carbon::createFromFormat('H:i', trim($timeRange[0]));
-        $endTime = \Carbon\Carbon::createFromFormat('H:i', trim($timeRange[1]));
-        $requestedTime = \Carbon\Carbon::createFromFormat('H:i:s', $request->class_time);
-
-        // Check if the requested time is within the available range
-        if ($requestedTime < $startTime || $requestedTime > $endTime) {
-            return response()->json(['message' => 'Trainer is not available at this time.'], 400);
+            $classw[] = $formattedClass;
         }
-    } else {
-        return response()->json(['message' => 'Trainer is not available on this day.'], 400);
+
+        return response()->json($classw);
     }
 
-    // Check for time conflicts (overlapping classes)
-    $conflictingClass = ClassSchedule::where('trainer_id', $request->trainer_id)
-        ->whereDate('class_time', $currentDate)
-        ->where('class_time', '<=', $combinedClassTime)
-        ->where('class_time', '>=', \Carbon\Carbon::parse($combinedClassTime)->subMinutes(30)) // Assuming classes can overlap by 30 minutes
-        ->first();
 
-    // If there's a conflict, return an error response
-    if ($conflictingClass) {
-        return response()->json(['message' => 'Trainer has a conflicting class at this time.'], 400);
+    public function store(Request $request)
+    {
+        $validator = FacadesValidator::make($request->all(), [
+            'trainer_id' => 'required|exists:trainers,id',
+            'class_time' => 'required|date_format:Y-m-d H:i',
+            'capacity' => 'required|integer|min:1|max:30',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $classTime = Carbon::parse($request->class_time);
+        $endTime = $classTime->copy()->addHours(2);
+
+        if (
+            ClassSchedule::where('trainer_id', $request->trainer_id)
+            ->whereDate('class_time', $classTime->toDateString())
+            ->count() >= 5
+        ) {
+            return response()->json(['error' => 'A trainer can only schedule a maximum of 5 classes per day.'], 409);
+        }
+
+        if (ClassSchedule::where('trainer_id', $request->trainer_id)
+            ->whereBetween('class_time', [$classTime, $endTime])
+            ->orWhereBetween(DB::raw('class_time + INTERVAL 2 HOUR'), [$classTime, $endTime])
+            ->exists()
+        ) {
+            return response()->json(['error' => 'This class time conflicts with an existing class.'], 409);
+        }
+
+        $trainer = Trainer::find($request->trainer_id);
+        $availability = json_decode($trainer->availability, true);
+
+        $classDate = $classTime->toDateString();
+
+        if (!in_array($classDate, $availability)) {
+            return response()->json(['error' => 'The trainer is not available on this day.'], 409);
+        }
+
+        $class = ClassSchedule::create([
+            'trainer_id' => $request->trainer_id,
+            'class_time' => $request->class_time,
+            'capacity' => $request->capacity,
+            'class_name' => $request->class_name,
+        ]);
+
+        return response()->json($class, 201);
     }
 
-    // Create the new class schedule
-    $class = new ClassSchedule();
-    $class->trainer_id = $request->trainer_id;
-    $class->class_time = $combinedClassTime; // Save the combined class time
-    $class->capacity = $request->capacity;
-    $class->save();
 
-    // Return a custom success response
-    return response()->json($class, 201);
-}
+
 
 
     public function show($id)

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('trainer_id');
             $table->dateTime('class_time');
+            $table->string('class_name');
             $table->integer('capacity');
             $table->timestamps();
         });

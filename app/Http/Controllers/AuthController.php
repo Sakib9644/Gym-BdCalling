@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -12,13 +13,15 @@ class AuthController extends Controller
 {
     public function register(Request $request)
 {
+    $adminRole = Role::firstOrCreate(['name' => 'trainee'], ['guard_name' => 'api']);
+
     $user = User::create([
         'name' => $request->name,
         'email' => $request->email,
         'password' => bcrypt($request->password),
     ]);
 
-    $user->assignRole($request->role);
+    $user->assignRole($adminRole);
 
     return response()->json(['message' => 'User registered successfully']);
 }
