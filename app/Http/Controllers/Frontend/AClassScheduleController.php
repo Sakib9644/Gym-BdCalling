@@ -19,13 +19,11 @@ class AClassScheduleController extends Controller
         return view('frontend.admin.classseschudle.index', compact('classes'));
     }
 
-    // Show the form for creating a new class schedule
     public function create()
     {
         return view('frontend.admin.classseschudle.create');
     }
 
-    // Store a newly created class schedule
     public function store(Request $request)
 {
     $validator = FacadesValidator::make($request->all(), [

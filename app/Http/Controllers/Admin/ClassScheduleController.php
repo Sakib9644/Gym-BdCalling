@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\ClassSchedule;
 use App\Models\Trainer;
 use Carbon\Carbon;
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
 
@@ -37,7 +39,41 @@ class ClassScheduleController extends Controller
 
         return response()->json($classw);
     }
+    public function index2()
+    {
+        $trainers = Trainer::where('user_id', Auth::user()->id)->get();
+        
+        $trainersData = $trainers->map(function ($trainer) {
+            $classes = $trainer->classes()->get();
 
+            $classDetails = [];
+            foreach ($classes as $class) {
+                $assignedTrainees = Booking::where('class_id', $class->id)->get();
+                $traineeNames = $assignedTrainees->map(function ($booking) {
+                    return $booking->user->name ?? 'No name';
+                });
+
+                $classDetails[] = [
+                    'class_time' => [
+                        'start' => \Carbon\Carbon::parse($class->class_time)->format('Y-m-d H:i'),
+                        'end' => \Carbon\Carbon::parse($class->class_time)->addHours(2)->format('H:i'),
+                    ],
+                    'trainees' => $traineeNames,
+                    'trainee_count' => $assignedTrainees->count(),
+                ];
+            }
+
+            return [
+                'name' => $trainer->user->name ?? 'N/A',
+                'email' => $trainer->user->email ?? 'N/A',
+                'expertise' => $trainer->expertise,
+                'availability' => json_decode($trainer->availability, true),
+                'classes' => $classDetails,
+            ];
+        });
+
+        return response()->json($trainersData);
+    }
 
     public function store(Request $request)
     {

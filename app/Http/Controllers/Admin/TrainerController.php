@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,6 +17,10 @@ class TrainerController extends Controller
         $trainers = Trainer::with('user')->get();
         return response()->json($trainers);
     }
+
+    
+
+   
 
     public function store(Request $request)
     {

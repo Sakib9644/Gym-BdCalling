@@ -16,7 +16,7 @@
                         <th>Email</th>
                         <th>Expertise</th>
                         <th>Availability</th>
-                        <th>Class Times and Assigned Trainees</th> <!-- Merged column header -->
+                        <th>Class Times and Trainees </th> <!-- Merged column header -->
                     </tr>
                 </thead>
                 <tbody>

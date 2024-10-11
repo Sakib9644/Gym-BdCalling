@@ -28,7 +28,7 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
     Route::middleware(['role:trainer'])->group(function () {
-        Route::get('trainer/classes', [ClassScheduleController::class, 'index']);
+        Route::get('trainer/classes', [ClassScheduleController::class, 'index2']);
     });
 
     Route::middleware(['role:trainee'])->group(function () {
