@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function register(Request $request)
 {
-    $adminRole = Role::firstOrCreate(['name' => 'trainee'], ['guard_name' => 'api']);
+    $trainee = Role::firstOrCreate(['name' => 'trainee'], ['guard_name' => 'api']);
 
     $user = User::create([
         'name' => $request->name,
@@ -21,7 +21,7 @@ class AuthController extends Controller
         'password' => bcrypt($request->password),
     ]);
 
-    $user->assignRole($adminRole);
+    $user->assignRole($trainee);
 
     return response()->json(['message' => 'User registered successfully']);
 }

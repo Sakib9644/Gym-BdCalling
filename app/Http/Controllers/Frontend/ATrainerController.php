@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Trainer;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
 class ATrainerController extends Controller
@@ -15,7 +16,12 @@ class ATrainerController extends Controller
         $trainers = Trainer::with('user')->get();
         return view('frontend.admin.index', compact('trainers'));
     }
-
+    public function index2()
+    {
+        $trainers = Trainer::where('user_id', Auth::user()->id)->get();
+        
+        return view('frontend.admin.trainer_index', compact('trainers'));
+    }
     public function create()
     {
         return view('frontend.admin.create');
@@ -77,6 +83,8 @@ class ATrainerController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+
         $user->save();
 
         $trainer->expertise = $request->expertise;

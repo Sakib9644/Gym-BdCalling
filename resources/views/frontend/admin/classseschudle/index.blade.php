@@ -21,6 +21,7 @@
                     <th>Trainer Name</th>
                     <th>Class Name</th>
                     <th>Capacity</th>
+                    <th>Actions</th> <!-- Added Actions column -->
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,15 @@
                         <td>{{ $class->trainer->user->name ?? 'N/A' }}</td>
                         <td>{{ $class->class_name }}</td>
                         <td>{{ $class->capacity }}</td>
+                        <td>
+                            <a href="{{ route('admin.classes.edit', $class->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            
+                            <form action="{{ route('admin.classes.destroy', $class->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this class schedule?');">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

@@ -43,11 +43,11 @@ Route::get('/dashboard', function () {
 
 
 // Profile routes (protected by auth middleware)
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
 
 // Admin Routes - Requires 'admin' role
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -70,17 +70,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('admin/classes/{class}', [AClassScheduleController::class, 'destroy'])->name('admin.classes.destroy');
 });
 
-Route::middleware(['auth:api', 'role:admin'])->group(function () {
-    Route::get('trainer/classes', [ATraineeController::class, 'index'])->name('trainer.classes.index');
+Route::middleware(['auth', 'role:trainer'])->group(function () {
+    Route::get('trainer/classes', [ATrainerController::class, 'index2'])->name('trainer.classes.index');
 });
 
 // Trainee Routes - Requires 'trainee' role
-Route::middleware(['auth:api', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:trainee'])->group(function () {
     Route::get('trainee/profile', [ATraineeController::class, 'profile'])->name('trainee.profile');
     Route::post('trainee/profile/update', [ATraineeController::class, 'updateProfile'])->name('trainee.profile.update');
 
     // Bookings
     Route::post('trainee/bookings/store', [ABookingController::class, 'store'])->name('trainee.bookings.store');
+    Route::get('trainee/bookings/create', [ABookingController::class, 'create'])->name('trainee.bookings.create');
     Route::get('trainee/bookings', [ABookingController::class, 'index'])->name('trainee.bookings.index');
     Route::delete('trainee/bookings/{booking}', [ABookingController::class, 'destroy'])->name('trainee.bookings.destroy');
 

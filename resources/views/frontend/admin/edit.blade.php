@@ -9,12 +9,12 @@
         
         <div class="form-group mb-3">
             <label for="name">Name</label>
-            <input type="text" name="name" class="form-control" value="{{ old('name', $trainer->user->name) }}" required>
+            <input type="text" name="name" class="form-control" value="{{ old('name', $trainer->user->name) }}" >
         </div>
         
         <div class="form-group mb-3">
             <label for="email">Email</label>
-            <input type="email" name="email" class="form-control" value="{{ old('email', $trainer->user->email) }}" required>
+            <input type="email" name="email" class="form-control" value="{{ old('email', $trainer->user->email) }}" >
         </div>
         
         <div class="form-group mb-3">
@@ -24,7 +24,7 @@
         
         <div class="form-group mb-3">
             <label for="expertise">Expertise</label>
-            <input type="text" name="expertise" class="form-control" value="{{ old('expertise', $trainer->expertise) }}" required>
+            <input type="text" name="expertise" class="form-control" value="{{ old('expertise', $trainer->expertise) }}" >
         </div>
 
         <label for="availability">Availability</label>
@@ -35,13 +35,13 @@
             
             @foreach ($availabilityArray as $availability)
                 <div class="availability-item mb-2 d-flex align-items-center">
-                    <input type="text" name="availability[]" class="form-control datepicker me-2" placeholder="Select availability date" value="{{ $availability }}" required>
+                    <input type="text" name="availability[]" class="form-control datepicker me-2" placeholder="Select availability date" value="{{ $availability }}" >
                     <button type="button" class="btn btn-danger removeAvailability">Remove</button>
                 </div>
             @endforeach
             
             <div class="availability-item mb-2 d-flex ">
-                <input type="text" name="availability[]" class="form-control datepicker me-2" placeholder="Select availability date" required>
+                <input type="text" name="availability[]" class="form-control datepicker me-2" placeholder="Select availability date" >
                 <button type="button" class="btn btn-secondary " id="addAvailability">Add </button>
             </div>
         </div>

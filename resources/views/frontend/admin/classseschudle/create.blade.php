@@ -72,8 +72,11 @@
 
 @endsection
 
-@push('scripts')
-   
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include jQuery DateTimePicker -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+
     <script>
         $(document).ready(function() {
             $('#class_time').datetimepicker({
@@ -82,4 +85,3 @@
             });
         });
     </script>
-@endpush

@@ -90,19 +90,67 @@ class AClassScheduleController extends Controller
         return view('frontend.admin.classseschudle.edit', compact('class'));
     }
 
-    // Update the specified class schedule in storage
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'class_time' => 'required|date',
-            'trainer_id' => 'required|exists:trainers,id',
-            'class_name' => 'required|string|max:255',
-            'capacity' => 'required|integer|min:1',
-        ]);
-
         $class = ClassSchedule::findOrFail($id);
-        $class->update($request->all());
-
-        return redirect()->route('class-schedule.index')->with('success', 'Class schedule updated successfully.');
+    
+        $validator = FacadesValidator::make($request->all(), [
+            'trainer_id' => 'required|exists:trainers,id',
+            'class_time' => 'required|date_format:Y-m-d H:i',
+            'capacity' => 'required|integer|min:1|max:30',
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+    
+        $classTime = Carbon::parse($request->class_time);
+        $endTime = $classTime->copy()->addHours(2);
+    
+        $trainer = Trainer::find($request->trainer_id);
+        $availability = json_decode($trainer->availability, true);
+        $classDate = $classTime->toDateString();
+    
+        if (!in_array($classDate, $availability)) {
+            return redirect()->back()->withErrors(['error' => 'The trainer is not available on this day.'])->withInput();
+        }
+    
+        $maxClassesPerDay = $trainer->max_classes_per_day ?? 5;
+        if (
+            ClassSchedule::where('trainer_id', $request->trainer_id)
+            ->whereDate('class_time', $classDate)
+            ->where('id', '!=', $id)
+            ->count() >= $maxClassesPerDay
+        ) {
+            return redirect()->back()->withErrors(['error' => "A trainer can only schedule a maximum of $maxClassesPerDay classes per day."])->withInput();
+        }
+    
+        $conflictExists = ClassSchedule::where('trainer_id', $request->trainer_id)
+            ->where('id', '!=', $id)
+            ->where(function ($query) use ($classTime, $endTime) {
+                $query->whereBetween('class_time', [$classTime, $endTime])
+                    ->orWhereBetween(DB::raw('class_time + INTERVAL 2 HOUR'), [$classTime, $endTime]);
+            })
+            ->exists();
+    
+        if ($conflictExists) {
+            return redirect()->back()->withErrors(['error' => 'This class time conflicts with an existing class for this trainer.'])->withInput();
+        }
+    
+        $class->trainer_id = $request->trainer_id;
+        $class->class_time = $classTime;
+        $class->capacity = $request->capacity;
+        $class->class_name = $request->class_name;
+        $class->save();
+    
+        return redirect()->route('admin.classes.index')->with('success', 'Class schedule updated successfully.');
     }
+    public function destroy($id)
+    {
+        $trainer = ClassSchedule::findOrFail($id);
+        $trainer->delete();
+
+        return redirect()->route('admin.classes.index')->with('success', 'class deleted successfully.');
+    }
+
 }

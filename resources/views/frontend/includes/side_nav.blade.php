@@ -74,7 +74,7 @@
                         <ul class="aiz-side-nav-list level-3">
                             @if (auth()->user()->hasPermissionTo('view schedules', 'api'))
                                 <li class="aiz-side-nav-item">
-                                    <a href="{{ route('trainer.schedules.index') }}" class="aiz-side-nav-link">
+                                    <a href="{{ route('trainer.classes.index') }}" class="aiz-side-nav-link">
                                         <i class="fas fa-eye aiz-side-nav-icon"></i>
                                         <span class="aiz-side-nav-text">View Schedules</span>
                                     </a>

@@ -59,17 +59,15 @@
                                         <!-- Login Links -->
                                       </form>
                                       <div class="d-flex justify-content-between">
-                                          <a href="" class="btn btn-success me-2">
-                                              {{ __('Login as Trainer') }}
+                                          <a href="/trainee" class="btn btn-dark me-2">
+                                              {{ __('Login as Trainee') }}
                                           </a>
                                           <a href="/" class="btn btn-primary">
                                             {{ __('Login as Admin') }}
                                         </a>
                                       </div>
                                 </div>
-                                <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="{{ route('register') }}">Need an account? Sign up!</a></div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

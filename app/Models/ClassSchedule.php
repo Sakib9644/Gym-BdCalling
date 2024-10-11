@@ -14,5 +14,9 @@ class ClassSchedule extends Model
 {
     return $this->belongsTo(Trainer::class, 'trainer_id');
 }
+    public function bookings()
+{
+    return $this->HasMany(Booking::class, 'class_id');
+}
 
 }

@@ -14,4 +14,9 @@ class Trainer extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function classes()
+    {
+        return $this->HasMany(ClassSchedule::class,'trainer_id');
+    }
+   
 }
