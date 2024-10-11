@@ -12,7 +12,7 @@ class ClassSchedule extends Model
 
     public function trainer()
 {
-    return $this->belongsTo(User::class, 'trainer_id');
+    return $this->belongsTo(Trainer::class, 'trainer_id');
 }
 
 }

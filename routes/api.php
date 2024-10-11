@@ -37,5 +37,6 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('trainee/bookings-store', [BookingController::class, 'store']);
         Route::get('trainee/bookings', [BookingController::class, 'index']);
         Route::delete('trainee/bookings/delete', [BookingController::class, 'destroy']);
+        Route::get('trainee/avilableclass', [BookingController::class, 'availableClasses']);
     });
 });

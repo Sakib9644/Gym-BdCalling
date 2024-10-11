@@ -19,7 +19,7 @@ class BookingController extends Controller
     }
     public function availableClasses()
     {
-        $classes = ClassSchedule::with('trainer:id,name')
+        $classes = ClassSchedule::with('trainer')
             ->where('capacity', '>', 0) // Only show classes that have available spots
             ->get()
             ->map(function ($class) {
@@ -28,7 +28,7 @@ class BookingController extends Controller
                 return [
                     'id' => $class->id,
                     'class_name' => $class->class_name,
-                    'trainer_name' => $class->trainer->name,
+                    'trainer_name' => $class->trainer->user->name ?? '',
                     'class_time' => $startTime->format('Y-m-d H:i:s') . ' to ' . $endTime->format('H:i:s'),
                     'capacity' => $class->capacity,
                 ];
@@ -72,6 +72,7 @@ class BookingController extends Controller
 
         return response()->json([
             'class_time' => $classTime->format('Y-m-d H:i:s') . ' to ' . $endTime->format('H:i:s'),
+            'message' => 'class booked successfully'
         ]);
     }
 
