@@ -40,14 +40,7 @@
                                             @php
                                                 $assignedTrainees = App\Models\Booking::where('class_id', $class->id)->get();
                                             @endphp
-                                                @if ($assignedTrainees->isNotEmpty())
-                                                    <ul class="list-unstyled">
-                                                        @foreach ($assignedTrainees as $booking)
-                                                            <li>{{ $booking->user->name ?? 'No name' }}</li>
-                                                        @endforeach
-                                                    </ul>
                                              
-                                                @endif
                                             <li>
                                                 Class: {{ \Carbon\Carbon::parse($class->class_time)->format('Y-m-d H:i') }} to 
                                                 {{ \Carbon\Carbon::parse($class->class_time)->addHours(2)->format('H:i') }}<br>
