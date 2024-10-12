@@ -121,4 +121,24 @@ Trainees can cancel their bookings using the DELETE /trainee/bookings/delete end
 URL: https://gym.com.samadhan24.com/api/trainee/bookings/delete
 Available Classes
 
+# Relationships
+## User Model
+
+Trainer: A user can have one trainer profile (one-to-one relationship).
+
+## Trainer Model
+
+User: Each trainer belongs to one user (one-to-one relationship).
+ClassSchedule: A trainer can have multiple class schedules (one-to-many relationship).
+
+## ClassSchedule Model
+
+Trainer: Each class schedule belongs to one trainer (many-to-one relationship).
+Booking: A class schedule can have multiple bookings (one-to-many relationship).
+
+## Booking Model
+
+ClassSchedule: Each booking is associated with one class schedule (many-to-one relationship).
+User: Each booking is linked to one user (trainee) (many-to-one relationship).
+
 
