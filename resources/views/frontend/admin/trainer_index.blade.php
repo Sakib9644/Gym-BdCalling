@@ -45,7 +45,8 @@
                                                 Class: {{ \Carbon\Carbon::parse($class->class_time)->format('Y-m-d H:i') }} to 
                                                 {{ \Carbon\Carbon::parse($class->class_time)->addHours(2)->format('H:i') }}<br>
 
-                                                <strong>Trainees: {{ $assignedTrainees->count() }}</strong><br>
+                                                <strong>Trainees: {{ $assignedTrainees->count() }}</strong>(<strong>Capacity: {{ $class->capacity}}</strong>)<br>
+                                            
                                             </li>
                                         @endforeach
                                     </ul>
