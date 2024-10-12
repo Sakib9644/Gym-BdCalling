@@ -19,6 +19,7 @@ class BookingController extends Controller
     }
     public function availableClasses()
     {
+        dd('sdf');
         $classes = ClassSchedule::with('trainer')
             ->where('capacity', '>', 0) // Only show classes that have available spots
             ->get()

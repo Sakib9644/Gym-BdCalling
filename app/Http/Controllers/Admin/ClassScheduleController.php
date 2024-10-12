@@ -180,6 +180,7 @@ class ClassScheduleController extends Controller
     {
         $class = ClassSchedule::findOrFail($id);
         $class->delete();
-        return response()->json(null, 204);
-    }
+        return response()->json([
+            'message' => 'Class deleted successfully.',
+        ]);    }
 }
