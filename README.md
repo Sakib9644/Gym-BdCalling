@@ -1,66 +1,144 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Gym Scheduling System
+Overview
+The Gym Scheduling System is designed to efficiently manage gym class scheduling for three user roles: Admin, Trainer, and Trainee.
 
-## About Laravel
+## User Roles:
+### Admin:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Creates and manages trainer profiles.
+Assigns trainers up to 5 classes per day, each lasting 2 hours.
+Manages class capacities, trainee assignments, and monitors system activities.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Trainer:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Can view assigned class schedules, including date, time, class capacity, and trainee list.
+Cannot modify class schedules or availability.
 
-## Learning Laravel
+### Trainee:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Can browse and book available classes based on trainer schedules.
+Must avoid booking classes with time conflicts.
+Can manage their profile and bookings (view, cancel, reschedule) through a dashboard.
+Key Features:
+Admin-controlled scheduling and class capacity management.
+Trainers have read-only access to their schedules.
+Trainees can book classes and manage their bookings without conflicts.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+# Project Setup
+To set up the Gym Scheduling System, first ensure that you have cloned the repository and installed all necessary dependencies. After configuring the environment file and setting up your database, you will need to migrate the database and seed it with initial data. When the migration and seeding process is complete, the necessary tables will be created, and data will be automatically seeded into them. This includes creating the default admin user. The admin will have the email admin@example.com and the password is password. This user will be automatically assigned the role of admin, giving them full control over the system. Once the admin account is created, the system will be ready for use.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Login
+For login, use this endpoint: https://gym.com.samadhan24.com/api/login. After providing the correct credentials, it will return a JWT token. This token must be passed in the Authorization header for all subsequent API requests.
 
-## Laravel Sponsors
+## Create Trainer
+Use the following endpoint to create a trainer: https://gym.com.samadhan24.com/api/admin/trainers. The JSON data for submitting will be structured as follows:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+{ "name": "John Doe", "email": "john.doe@example.com", "password": "password123", "expertise": "Yoga", "user_id": 2, "availability": [ "2024-12-15", "2024-12-16", "2024-12-17" ] }
 
-### Premium Partners
+GET /admin/trainers: Retrieves a list of all trainers in the system. This endpoint allows admins to view the complete list of trainers.
+URL: https://gym.com.samadhan24.com/api/admin/trainers
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+GET /admin/trainers/{trainer}: Retrieves the details of a specific trainer identified by their unique ID. This endpoint allows admins to view information about a particular trainer.
+URL: https://gym.com.samadhan24.com/api/admin/trainers/{trainer}
 
-## Contributing
+PUT /admin/trainers/{trainer}: Updates the details of an existing trainer. Admins can modify the trainer's information by sending the updated data.
+URL: https://gym.com.samadhan24.com/api/admin/trainers/{trainer}
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+DELETE /admin/trainers/{trainer}: Deletes a specific trainer from the system. Admins can remove trainers by providing their unique ID.
+URL: https://gym.com.samadhan24.com/api/admin/trainers/{trainer}
 
-## Code of Conduct
+## Class Schedule API Routes
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+GET /admin/classes/get: Retrieves a list of all scheduled classes in the system. This endpoint allows admins to view the complete list of classes.
+URL: https://gym.com.samadhan24.com/api/admin/classes/get
 
-## Security Vulnerabilities
+POST /admin/classes/store: Creates a new class schedule. Admins can submit the necessary JSON data to add a new class to the system.
+URL: https://gym.com.samadhan24.com/api/admin/classes/store
+{
+  "trainer_id": 3,
+  "class_time": "2024-12-16 16:10",
+  "class_name": "yoga",
+  "capacity": 20
+}
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+GET /admin/classes/{class}: Retrieves the details of a specific class identified by its unique ID. This endpoint allows admins to view information about a particular class.
+URL: https://gym.com.samadhan24.com/api/admin/classes/{class}
 
-## License
+PUT /admin/classes/{class}: Updates the details of an existing class. Admins can modify the class schedule by sending the updated data.
+URL: https://gym.com.samadhan24.com/api/admin/classes/{class}
+{
+  "trainer_id": 3,
+  "class_time": "2024-12-16 16:10",
+  "class_name": "yoga",
+  "capacity": 20
+}
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+DELETE /admin/classes/{class}: Deletes a specific class from the system. Admins can remove classes by providing their unique ID.
+URL: https://gym.com.samadhan24.com/api/admin/classes/{class}
+
+## Trainer Class
+To retrieve scheduled classes, trainers must log in using their credentials. The GET /trainer/classes endpoint is accessible only to users with the trainer role, ensuring that trainers can securely view their schedules. Upon successful login, trainers will receive their class schedule along with essential information, including their expertise, total class capacity, and the trainees assigned to each class.
+
+This endpoint is available at:
+URL: https://gym.com.samadhan24.com/api/trainer/classes
+
+## Trainee Section
+
+Trainee Registration, Profile, and Booking API Routes
+Trainee Registration
+
+Before accessing the trainee features, users must register by using the POST /register endpoint. Trainees can submit their name, email, and password to create an account.
+URL: https://gym.com.samadhan24.com/api/register
+Trainee Profile
+
+To retrieve the profile information of a trainee, use the GET /trainee/profile endpoint. This allows trainees to view their personal details and account information.
+URL: https://gym.com.samadhan24.com/api/trainee/profile
+
+Update Trainee Profile
+
+The POST /trainee/profile/update endpoint is used for updating a trainee's profile information. Trainees can submit their updated details, which will be processed and saved in the system.
+URL: https://gym.com.samadhan24.com/api/trainee/profile/update
+
+To check the available classes, trainees can use the GET /trainee/availableclass endpoint. This provides a list of classes that trainees can book based on the trainers' schedules and availability.
+https://gym.com.samadhan24.com/api/trainee/avilableclass
+
+Store Booking
+
+To book a class, trainees can use the POST /trainee/bookings-store endpoint. This endpoint allows trainees to submit their booking requests for available classes based on the trainer's schedule. Just Pass the Class Id Which he had get from avilableclass.
+URL: https://gym.com.samadhan24.com/api/trainee/bookings-store
+{
+ "class_id": 1
+}
+
+View Bookings
+
+The GET /trainee/bookings endpoint retrieves a list of all bookings made by the trainee. This allows trainees to keep track of their upcoming and past classes.
+URL: https://gym.com.samadhan24.com/api/trainee/bookings
+Delete Booking
+
+Trainees can cancel their bookings using the DELETE /trainee/bookings/delete endpoint. By providing the necessary details, trainees can remove their bookings from the system.
+URL: https://gym.com.samadhan24.com/api/trainee/bookings/delete
+Available Classes
+
+# Relationships
+## User Model
+
+Trainer: A user can have one trainer profile (one-to-one relationship).
+
+## Trainer Model
+
+User: Each trainer belongs to one user (one-to-one relationship).
+ClassSchedule: A trainer can have multiple class schedules (one-to-many relationship).
+
+## ClassSchedule Model
+
+Trainer: Each class schedule belongs to one trainer (many-to-one relationship).
+Booking: A class schedule can have multiple bookings (one-to-many relationship).
+
+## Booking Model
+
+ClassSchedule: Each booking is associated with one class schedule (many-to-one relationship).
+User: Each booking is linked to one user (trainee) (many-to-one relationship).
+
+
