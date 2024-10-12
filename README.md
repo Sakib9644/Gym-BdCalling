@@ -48,4 +48,39 @@ URL: https://gym.com.samadhan24.com/api/admin/trainers/{trainer}
 DELETE /admin/trainers/{trainer}: Deletes a specific trainer from the system. Admins can remove trainers by providing their unique ID.
 URL: https://gym.com.samadhan24.com/api/admin/trainers/{trainer}
 
+## Class Schedule API Routes
 
+GET /admin/classes/get: Retrieves a list of all scheduled classes in the system. This endpoint allows admins to view the complete list of classes.
+URL: https://gym.com.samadhan24.com/api/admin/classes/get
+
+POST /admin/classes/store: Creates a new class schedule. Admins can submit the necessary JSON data to add a new class to the system.
+URL: https://gym.com.samadhan24.com/api/admin/classes/store
+{
+  "trainer_id": 3,
+  "class_time": "2024-12-16 16:10",
+  "class_name": "yoga",
+  "capacity": 20
+}
+
+GET /admin/classes/{class}: Retrieves the details of a specific class identified by its unique ID. This endpoint allows admins to view information about a particular class.
+URL: https://gym.com.samadhan24.com/api/admin/classes/{class}
+
+PUT /admin/classes/{class}: Updates the details of an existing class. Admins can modify the class schedule by sending the updated data.
+URL: https://gym.com.samadhan24.com/api/admin/classes/{class}
+{
+  "trainer_id": 3,
+  "class_time": "2024-12-16 16:10",
+  "class_name": "yoga",
+  "capacity": 20
+}
+
+DELETE /admin/classes/{class}: Deletes a specific class from the system. Admins can remove classes by providing their unique ID.
+URL: https://gym.com.samadhan24.com/api/admin/classes/{class}
+
+## Trainer Class
+To retrieve scheduled classes, trainers must log in using their credentials. The GET /trainer/classes endpoint is accessible only to users with the trainer role, ensuring that trainers can securely view their schedules. Upon successful login, trainers will receive their class schedule along with essential information, including their expertise, total class capacity, and the trainees assigned to each class.
+
+This endpoint is available at:
+URL: https://gym.com.samadhan24.com/api/trainer/classes
+
+## Trainee Section
