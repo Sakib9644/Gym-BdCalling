@@ -84,3 +84,43 @@ This endpoint is available at:
 URL: https://gym.com.samadhan24.com/api/trainer/classes
 
 ## Trainee Section
+
+Trainee Registration, Profile, and Booking API Routes
+Trainee Registration
+
+Before accessing the trainee features, users must register by using the POST /register endpoint. Trainees can submit their name, email, and password to create an account.
+URL: https://gym.com.samadhan24.com/api/register
+Trainee Profile
+
+To retrieve the profile information of a trainee, use the GET /trainee/profile endpoint. This allows trainees to view their personal details and account information.
+URL: https://gym.com.samadhan24.com/api/trainee/profile
+
+Update Trainee Profile
+
+The POST /trainee/profile/update endpoint is used for updating a trainee's profile information. Trainees can submit their updated details, which will be processed and saved in the system.
+URL: https://gym.com.samadhan24.com/api/trainee/profile/update
+
+To check the available classes, trainees can use the GET /trainee/availableclass endpoint. This provides a list of classes that trainees can book based on the trainers' schedules and availability.
+URL: https://gym.com.samadhan24.com/api/trainee/availableclass
+
+Store Booking
+
+To book a class, trainees can use the POST /trainee/bookings-store endpoint. This endpoint allows trainees to submit their booking requests for available classes based on the trainer's schedule.
+URL: https://gym.com.samadhan24.com/api/trainee/bookings-store
+
+{
+
+  "class_id": 1
+}
+
+View Bookings
+
+The GET /trainee/bookings endpoint retrieves a list of all bookings made by the trainee. This allows trainees to keep track of their upcoming and past classes.
+URL: https://gym.com.samadhan24.com/api/trainee/bookings
+Delete Booking
+
+Trainees can cancel their bookings using the DELETE /trainee/bookings/delete endpoint. By providing the necessary details, trainees can remove their bookings from the system.
+URL: https://gym.com.samadhan24.com/api/trainee/bookings/delete
+Available Classes
+
+
