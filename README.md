@@ -107,10 +107,8 @@ Store Booking
 
 To book a class, trainees can use the POST /trainee/bookings-store endpoint. This endpoint allows trainees to submit their booking requests for available classes based on the trainer's schedule.
 URL: https://gym.com.samadhan24.com/api/trainee/bookings-store
-
 {
-
-  "class_id": 1
+ "class_id": 1
 }
 
 View Bookings
