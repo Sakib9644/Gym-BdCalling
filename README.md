@@ -105,7 +105,7 @@ https://gym.com.samadhan24.com/api/trainee/avilableclass
 
 Store Booking
 
-To book a class, trainees can use the POST /trainee/bookings-store endpoint. This endpoint allows trainees to submit their booking requests for available classes based on the trainer's schedule.
+To book a class, trainees can use the POST /trainee/bookings-store endpoint. This endpoint allows trainees to submit their booking requests for available classes based on the trainer's schedule. Just Pass the Class Id Which he had get from avilable Class-> https://gym.com.samadhan24.com/api/trainee/avilableclass.
 URL: https://gym.com.samadhan24.com/api/trainee/bookings-store
 {
  "class_id": 1
