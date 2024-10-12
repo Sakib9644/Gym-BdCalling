@@ -1,20 +1,21 @@
 
-
-###Gym Scheduling System
+# Gym Scheduling System
 Overview
 The Gym Scheduling System is designed to efficiently manage gym class scheduling for three user roles: Admin, Trainer, and Trainee.
 
-User Roles:
-Admin:
+## User Roles:
+### Admin:
 
 Creates and manages trainer profiles.
 Assigns trainers up to 5 classes per day, each lasting 2 hours.
 Manages class capacities, trainee assignments, and monitors system activities.
-Trainer:
+
+### Trainer:
 
 Can view assigned class schedules, including date, time, class capacity, and trainee list.
 Cannot modify class schedules or availability.
-Trainee:
+
+### Trainee:
 
 Can browse and book available classes based on trainer schedules.
 Must avoid booking classes with time conflicts.
