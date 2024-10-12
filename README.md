@@ -101,7 +101,7 @@ The POST /trainee/profile/update endpoint is used for updating a trainee's profi
 URL: https://gym.com.samadhan24.com/api/trainee/profile/update
 
 To check the available classes, trainees can use the GET /trainee/availableclass endpoint. This provides a list of classes that trainees can book based on the trainers' schedules and availability.
-URL: https://gym.com.samadhan24.com/api/trainee/availableclass
+https://gym.com.samadhan24.com/api/trainee/avilableclass
 
 Store Booking
 
