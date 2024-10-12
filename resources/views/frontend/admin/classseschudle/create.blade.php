@@ -16,16 +16,19 @@
     <form action="{{ route('admin.classes.store') }}" method="POST">
         @csrf
         
-        <div class="mb-3">
-            <label for="class_time" class="form-label">Class Time</label>
-            <input type="text" class="form-control @error('class_time') is-invalid @enderror" id="class_time" name="class_time" required>
-            @error('class_time')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+      <div class="mb-3">
+    <label for="class_time" class="form-label">Class Time</label>
+    <input type="text" class="form-control @error('class_time') is-invalid @enderror" id="class_time" name="class_time" required>
+    @error('class_time')
+        <div class="invalid-feedback">
+            {{ $message }}
         </div>
-        
+    @enderror
+<p style="color: red;">
+    A trainer can schedule a maximum of 5 classes per day. Each class lasts for 2 hours. For example, if you schedule a class at 8:00 AM, it will automatically be assigned until 10:00 AM. <span style="color: red;">*</span>
+</p>
+</div>
+
         @php
             $trainers = App\Models\Trainer::all();
         @endphp
